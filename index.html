@@ -1,11 +1,388 @@
-html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Página</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platos Típicos de Colombia - Pros y Contras</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #7f8c8d;
+            font-weight: 300;
+        }
+
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .dish-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .dish-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+            transition: left 0.3s ease;
+        }
+
+        .dish-card:hover::before {
+            left: 0;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .dish-name {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .dish-description {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .pros, .contras {
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .pros {
+            background: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+        }
+
+        .contras {
+            background: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid #e74c3c;
+        }
+
+        .pros h4, .contras h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pros h4 {
+            color: #27ae60;
+        }
+
+        .contras h4 {
+            color: #c0392b;
+        }
+
+        .pros ul, .contras ul {
+            list-style: none;
+        }
+
+        .pros li, .contras li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.95em;
+        }
+
+        .pros li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .contras li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        .flag-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .region-tag {
+            display: inline-block;
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .dishes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pros-cons {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Hola Mundo</h1>
-    <p>Esta es mi primera página web.</p>
+    <div class="container">
+        <header>
+            <h1><span class="flag-icon">🇨🇴</span>Platos Típicos de Colombia</h1>
+            <p class="subtitle">Descubre la riqueza gastronómica colombiana con sus beneficios y desafíos</p>
+        </header>
+
+        <div class="dishes-grid">
+            <div class="dish-card">
+                <div class="region-tag">Región Andina</div>
+                <h3 class="dish-name">Bandeja Paisa</h3>
+                <p class="dish-description">El plato más representativo de Antioquia, compuesto por frijoles, arroz, carne molida, chicharrón, chorizo, morcilla, huevo frito, patacón y aguacate.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✨ Pros</h4>
+                        <ul>
+                            <li>Rica en proteínas y carbohidratos</li>
+                            <li>Muy nutritiva y energética</li>
+                            <li>Representa la cultura paisa</li>
+                            <li>Ingredientes naturales y frescos</li>
+                        </ul>
+                    </div>
+                    <div class="contras">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Muy alta en calorías (1200+)</li>
+                            <li>Rica en grasas saturadas</li>
+                            <li>Puede ser pesada para digerir</li>
+                            <li>Costosa de preparar completa</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dish-card">
+                <div class="region-tag">Región Caribe</div>
+                <h3 class="dish-name">Arepas de Huevo</h3>
+                <p class="dish-description">Deliciosas arepas fritas rellenas de huevo, típicas de la costa atlántica, especialmente populares en Cartagena y Barranquilla.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✨ Pros</h4>
+                        <ul>
+                            <li>Fuente de proteína completa</li>
+                            <li>Fácil de comer en cualquier momento</li>
+                            <li>Ingredientes simples y accesibles</li>
+                            <li>Tradición cultural costeña</li>
+                        </ul>
+                    </div>
+                    <div class="contras">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Frita en aceite abundante</li>
+                            <li>Alta en grasas trans</li>
+                            <li>Puede aumentar el colesterol</li>
+                            <li>Difícil de hacer perfecta</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dish-card">
+                <div class="region-tag">Región Pacífica</div>
+                <h3 class="dish-name">Sancocho de Pescado</h3>
+                <p class="dish-description">Sopa abundante con pescado fresco, plátano, yuca, ñame y cilantro cimarrón, típica de la costa pacífica colombiana.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✨ Pros</h4>
+                        <ul>
+                            <li>Rico en omega 3 y proteínas</li>
+                            <li>Incluye muchas verduras</li>
+                            <li>Hidratante y reconfortante</li>
+                            <li>Bajo en grasas saturadas</li>
+                        </ul>
+                    </div>
+                    <div class="contras">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Preparación larga y compleja</li>
+                            <li>Ingredientes pueden ser costosos</li>
+                            <li>El pescado debe estar muy fresco</li>
+                            <li>Alto contenido de sodio</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dish-card">
+                <div class="region-tag">Región Llanera</div>
+                <h3 class="dish-name">Mamona (Ternera a la Llanera)</h3>
+                <p class="dish-description">Ternera asada lentamente a la brasa, acompañada de yuca, plátano y arepa, plato tradicional de los Llanos Orientales.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✨ Pros</h4>
+                        <ul>
+                            <li>Excelente fuente de hierro</li>
+                            <li>Rica en proteínas de alta calidad</li>
+                            <li>Cocción sin aceites añadidos</li>
+                            <li>Tradición cultural llanera</li>
+                        </ul>
+                    </div>
+                    <div class="contras">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Alto contenido de colesterol</li>
+                            <li>Puede ser difícil de digerir</li>
+                            <li>Preparación muy larga (horas)</li>
+                            <li>Costosa y no siempre disponible</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dish-card">
+                <div class="region-tag">Región Andina</div>
+                <h3 class="dish-name">Ajiaco Santafereño</h3>
+                <p class="dish-description">Sopa cremosa con tres tipos de papa, pollo, mazorca, guascas y alcaparras, acompañada de crema de leche y aguacate.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✨ Pros</h4>
+                        <ul>
+                            <li>Rico en vitaminas del complejo B</li>
+                            <li>Combina proteína y carbohidratos</li>
+                            <li>Perfecto para clima frío</li>
+                            <li>Patrimonio cultural bogotano</li>
+                        </ul>
+                    </div>
+                    <div class="contras">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Alto en calorías por la crema</li>
+                            <li>Muchos carbohidratos simples</li>
+                            <li>Preparación laboriosa</li>
+                            <li>Las guascas son difíciles de conseguir</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dish-card">
+                <div class="region-tag">Región Amazónica</div>
+                <h3 class="dish-name">Pescado con Patacón</h3>
+                <p class="dish-description">Pescado de río fresco asado o frito, acompañado de patacón (plátano verde frito y aplastado) y ensalada fresca.</p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✨ Pros</h4>
+                        <ul>
+                            <li>Pescado fresco de agua dulce</li>
+                            <li>Rico en proteínas magras</li>
+                            <li>El plátano aporta potasio</li>
+                            <li>Ingredientes amazónicos auténticos</li>
+                        </ul>
+                    </div>
+                    <div class="contras">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Patacón frito en mucho aceite</li>
+                            <li>Puede tener muchas espinas</li>
+                            <li>Disponibilidad limitada</li>
+                            <li>Riesgo de contaminación del río</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <h3>🍽️ La Gastronomía Colombiana</h3>
+            <p>Cada plato cuenta una historia de nuestras regiones, tradiciones y sabores únicos. La clave está en disfrutar con moderación y equilibrio, valorando tanto los beneficios nutricionales como siendo conscientes de los aspectos que podemos mejorar en nuestra alimentación diaria.</p>
+        </footer>
+    </div>
 </body>
 </html>
